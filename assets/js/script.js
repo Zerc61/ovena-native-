@@ -8,18 +8,17 @@
         const scrollIndicator = document.getElementById('scrollIndicator');
         const navbar = document.getElementById('navbar');
         const mobileToggle = document.getElementById('mobileToggle');
-        const navLinks = document.getElementById('navLinks');
         const navBackdrop = document.getElementById('navBackdrop');
+        const navMobileOverlay = document.getElementById('navMobileOverlay');
 
-        /* === Menu toggle logic === */
         let menuOpen = false;
 
         function openMenu() {
             menuOpen = true;
             mobileToggle.classList.add('active');
             mobileToggle.setAttribute('aria-expanded', 'true');
-            navLinks.classList.add('open');
             navBackdrop.classList.add('open');
+            navMobileOverlay.classList.add('open');
             document.body.classList.add('menu-open');
         }
 
@@ -27,8 +26,8 @@
             menuOpen = false;
             mobileToggle.classList.remove('active');
             mobileToggle.setAttribute('aria-expanded', 'false');
-            navLinks.classList.remove('open');
             navBackdrop.classList.remove('open');
+            navMobileOverlay.classList.remove('open');
             document.body.classList.remove('menu-open');
         }
 
@@ -37,8 +36,6 @@
         }
 
         mobileToggle.addEventListener('click', toggleMenu);
-
-        /* Keyboard: Enter/Space to toggle */
         mobileToggle.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -46,22 +43,16 @@
             }
         });
 
-        /* Close on Escape */
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && menuOpen) closeMenu();
         });
 
-        /* Close on backdrop click */
         navBackdrop.addEventListener('click', closeMenu);
 
-        /* Close on link click */
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMenu();
-            });
+        navMobileOverlay.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => closeMenu());
         });
 
-        /* === Scroll handling === */
         let lastScrollY = window.scrollY;
         let scrollTicking = false;
         let currentDirection = 'down';
@@ -126,7 +117,6 @@
             }
         }, { passive: true });
 
-        /* === Reveal observer === */
         const revealElements = document.querySelectorAll('.reveal, .reveal-img, .product-card, .flavor-item');
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -135,7 +125,6 @@
         }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
         revealElements.forEach(el => revealObserver.observe(el));
 
-        /* === Parallax === */
         const parallaxElements = document.querySelectorAll('[data-parallax]');
         window.addEventListener('scroll', () => {
             parallaxElements.forEach(el => {
